@@ -9,8 +9,8 @@ const char* apPassword = "12345678";
 
 // ---- UDP Settings ----
 WiFiUDP Udp;
-const unsigned int localUdpPort = 4210;  // Port to listen on
-char incomingPacket[255];  // Buffer for incoming data
+const unsigned int localUdpPort = 4210;
+char incomingPacket[255];
 
 // ---- Motor & Servo Pins ----
 #define IN1_PIN 12
@@ -28,10 +28,8 @@ void setup() {
   // ---- Start Access Point ----
   WiFi.softAP(apSSID, apPassword);
   Serial.println("Access Point started!");
-  Serial.print("Connect to Wi-Fi: ");
-  Serial.println(apSSID);
   Serial.print("ESP32 AP IP address: ");
-  Serial.println(WiFi.softAPIP());  // usually 192.168.4.1
+  Serial.println(WiFi.softAPIP());
 
   // ---- Start UDP ----
   Udp.begin(localUdpPort);
@@ -45,9 +43,8 @@ void setup() {
   stopMotors();
 
   // ---- Servo setup ----
-  myServo.setPeriodHertz(50);
-  myServo.attach(SERVO_PIN, 500, 2400);
-  myServo.write(90); // Neutral position
+  myServo.attach(SERVO_PIN);
+  myServo.write(90); // stop position for continuous servo
 }
 
 void loop() {
@@ -65,10 +62,9 @@ void loop() {
       case 's': moveBackward(); break;
       case 'a': turnLeft(); break;
       case 'd': turnRight(); break;
-      case 'x': stopMotors(); break;
-      case 'j': myServo.write(45); break;
-      case 'l': myServo.write(135); break;
-      case 'k': myServo.write(90); break;
+      case 'x': stopMotors(); myServo.write(90); break; // stop all
+      case 'f': myServo.write(120); break;  // clockwise spin
+      case 'r': myServo.write(-120); break;   // counterclockwise spin
     }
   }
 }
@@ -77,27 +73,27 @@ void loop() {
 void moveForward() {
   digitalWrite(IN1_PIN, HIGH);
   digitalWrite(IN2_PIN, LOW);
-  digitalWrite(IN3_PIN, HIGH);
-  digitalWrite(IN4_PIN, LOW);
+  digitalWrite(IN3_PIN, LOW);
+  digitalWrite(IN4_PIN, HIGH);
 }
 
 void moveBackward() {
   digitalWrite(IN1_PIN, LOW);
   digitalWrite(IN2_PIN, HIGH);
-  digitalWrite(IN3_PIN, LOW);
-  digitalWrite(IN4_PIN, HIGH);
+  digitalWrite(IN3_PIN, HIGH);
+  digitalWrite(IN4_PIN, LOW);
 }
 
 void turnLeft() {
-  digitalWrite(IN1_PIN, LOW);
-  digitalWrite(IN2_PIN, HIGH);
+  digitalWrite(IN1_PIN, HIGH);
+  digitalWrite(IN2_PIN, LOW);
   digitalWrite(IN3_PIN, HIGH);
   digitalWrite(IN4_PIN, LOW);
 }
 
 void turnRight() {
-  digitalWrite(IN1_PIN, HIGH);
-  digitalWrite(IN2_PIN, LOW);
+  digitalWrite(IN1_PIN, LOW);
+  digitalWrite(IN2_PIN, HIGH);
   digitalWrite(IN3_PIN, LOW);
   digitalWrite(IN4_PIN, HIGH);
 }
