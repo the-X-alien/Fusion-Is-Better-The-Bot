@@ -18,7 +18,7 @@ key_map = {
     's': 's',  # backward
     'a': 'd',  # turn left
     'd': 'a',  # turn right
-    'r': 'r',  # servo leftwdasdawwsws
+    'r': 'r',  # servo leftwdasdawwsws  wswwssw
     'f': 'f',  # servo centerwlda
     'l': 'l',  # servo rightww
 }
@@ -60,6 +60,6 @@ def on_release(key):
     except AttributeError:
         pass
 
-# Start listener
+# Start listenerwdwsadwadsawd
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
     listener.join()
